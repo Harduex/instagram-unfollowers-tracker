@@ -31,3 +31,11 @@ COOKIE=
 - scroll to find header named "cookie"
 - right click it and "copy value"
 
+TELEGRAM_BOT_TOKEN=your_telegram_bot_token
+
+## Usage
+
+```
+$ npm i
+$ npm start
+```
