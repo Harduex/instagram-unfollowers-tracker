@@ -1,0 +1,39 @@
+{
+  "name": "instagram-unfollowers-tracker",
+  "version": "1.0.0",
+  "description": "Node.js telegram bor for tracking instagram unfollowers",
+  "main": "main.js",
+  "scripts": {
+    "start": "node main.js",
+    "dev": "nodemon main.js",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Harduex/instagram-unfollowers-tracker.git"
+  },
+  "keywords": [
+    "instagram",
+    "bot",
+    "unfollowers",
+    "imposters",
+    "tracker",
+    "instagram",
+    "api"
+  ],
+  "author": "Harduex",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/Harduex/instagram-unfollowers-tracker/issues"
+  },
+  "homepage": "https://github.com/Harduex/instagram-unfollowers-tracker#readme",
+  "devDependencies": {
+    "nodemon": "^2.0.15"
+  },
+  "dependencies": {
+    "dotenv": "^10.0.0",
+    "express": "^4.17.2",
+    "node-fetch": "^3.1.0",
+    "scraper-instagram": "^1.0.17"
+  }
+}
