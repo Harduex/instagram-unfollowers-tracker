@@ -1,18 +1,9 @@
 const fetch = (...args) => import('node-fetch').then(({ default: fetch }) => fetch(...args));
 const fs = require('fs');
-const Insta = require('scraper-instagram');
-const InstaClient = new Insta();
+
 const dotenv = require('dotenv');
 dotenv.config();
 
-async function authenticate(sessionId) {
-    try {
-        const account = await InstaClient.authBySessionId(sessionId);
-        return account;
-    } catch (error) {
-        console.log(error);
-    }
-}
 
 function sleep(a) {
     console.log(`Waiting ${a} ms`);
@@ -51,13 +42,11 @@ function writeFile(savPath, data) {
     })
 }
 
-async function startScript() {
-    const sessionId = process.env.SESSION_ID;
+async function checkUnfollowers() {
+    console.log('Checking for unfollowers');
+    
+    const ds_user_id = process.env.DS_USER_ID;
     const cookie = process.env.COOKIE;
-    const user = await authenticate(sessionId);
-    const profile = await InstaClient.getProfile(user.username)
-    const profileId = profile.id;
-    console.log(user.username);
 
     const options = {
         "headers": {
@@ -75,7 +64,7 @@ async function startScript() {
     }
 
     let max_id = "";
-    let url = `https://i.instagram.com/api/v1/friendships/${profileId}/followers/?max_id=${max_id}&search_surface=follow_list_page`;
+    let url = `https://i.instagram.com/api/v1/friendships/${ds_user_id}/followers/?max_id=${max_id}&search_surface=follow_list_page`;
 
     let followersFull = [];
     do {
@@ -83,7 +72,7 @@ async function startScript() {
             const response = await fetch(url, options);
             const { users, next_max_id } = await response.json();
             max_id = next_max_id;
-            url = `https://i.instagram.com/api/v1/friendships/${profileId}/followers/?max_id=${max_id}&search_surface=follow_list_page`;
+            url = `https://i.instagram.com/api/v1/friendships/${ds_user_id}/followers/?max_id=${max_id}&search_surface=follow_list_page`;
             followersFull.push(...users);
             console.log("Requesting:", url);
             await sleep(getRandomInt(2000, 5000));
@@ -96,9 +85,9 @@ async function startScript() {
 
     let followers = [];
 
-    followersFull.forEach(follower => {
-        followers.push(follower.username);
-    });
+    for (let i = 0; i < followersFull.length; i++) {
+        followers.push(followersFull[i].username);
+    }
 
     try {
         if (fs.existsSync('followers.json')) {
@@ -114,4 +103,11 @@ async function startScript() {
     await writeFile('followers.json', JSON.stringify(followers, null, 1));
 }
 
-startScript();
+function startTrackingUnfollowers(periodInSeconds) {
+    setInterval(checkUnfollowers, periodInSeconds * 1000);
+    console.log(`Waiting ${periodInSeconds} seconds`);
+}
+
+checkUnfollowers();
+startTrackingUnfollowers(30);
+

@@ -2,22 +2,21 @@
 Node.js telegram bor for tracking instagram unfollowers
 
 ## .env
-
-### In chrome
+### In chrome: 
 ```
-COOKIE=
+DS_USER_ID=
 ```
 - go to instagram.com
 - log in
 - click F12
 - go to "Application" tab
 - extend "cookies" menu intem on the left
-- click on the intem inside
-- search for "sessionid" cookie and copy it's value 
+- click on the item inside
+- search for "ds_user_id" cookie and copy it's value 
 
 ### In chrome: 
 ```
-SESSION_ID=
+COOKIE=
 ```
 - go to instagram.com
 - log in
@@ -31,3 +30,4 @@ SESSION_ID=
 - on the right window, click "Headers"
 - scroll to find header named "cookie"
 - right click it and "copy value"
+
