@@ -43,12 +43,10 @@ function writeFile(savPath, data) {
     })
 }
 
-async function checkUnfollowers(ctx, verbose = false) {
+async function checkUnfollowers(ctx) {
 
-    if (verbose) {
-        console.log('Checking for unfollowers');
-        ctx.reply('Checking for unfollowers')
-    }
+    console.log('Checking for unfollowers');
+    ctx.reply('Checking for unfollowers')
 
     const ds_user_id = process.env.DS_USER_ID;
     const cookie = process.env.COOKIE;
@@ -90,16 +88,14 @@ async function checkUnfollowers(ctx, verbose = false) {
             if (requestsCount > 0 && requestsCount % 4 == 0) {
                 await sleep(getRandomInt(10000, 20000));
             }
-            
+
         } catch (error) {
             console.log(error);
         }
     } while (max_id)
 
-    if (verbose) {
-        console.log("Followers count:", followersFull.length);
-        ctx.reply(`Followers count: ${followersFull.length}`);
-    }
+    console.log("Followers count:", followersFull.length);
+    ctx.reply(`Followers count: ${followersFull.length}`);
 
     let followers = [];
 
@@ -120,9 +116,7 @@ async function checkUnfollowers(ctx, verbose = false) {
                     ctx.replyWithHTML(`<a href="https://www.instagram.com/${unfollower}/">${unfollower}</a>`);
                 });
             } else {
-                if (verbose) {
-                    ctx.reply(`No new unfollowers`);
-                }
+                ctx.reply(`No new unfollowers`);
             }
 
         }
@@ -133,35 +127,65 @@ async function checkUnfollowers(ctx, verbose = false) {
     await writeFile('followers.json', JSON.stringify(followers, null, 1));
 }
 
-function startTrackingUnfollowers(periodInSeconds, ctx) {
-    ctx.reply('Monitoring followers started')
-    console.log(`Waiting ${periodInSeconds} seconds`);
-    ctx.reply(`Interval of checking: ${periodInSeconds} seconds`)
-    return setInterval(() => checkUnfollowers(ctx), periodInSeconds * 1000);
+function startTrackingUnfollowers(periodInHours, ctx) {
+    ctx.reply('Monitoring followers started');
+    console.log('Monitoring followers started');
+
+    // Set interval in milliseconds + some random delay
+    const interval = (periodInHours * 1000 * 60 * 60) + getRandomInt(20 * 1000, 60 * 1000);
+    const timeLeft = Math.floor(interval / (1000 * 60 * 60)) + ":" + Math.floor(interval / (1000 * 60)) % 60 + ":" + Math.floor(interval / 1000) % 60;
+    console.log(`Next check after ${timeLeft} hours`);
+    ctx.reply(`Next check after ${timeLeft} hours`);
+
+    return setInterval(() => checkUnfollowers(ctx), interval);
 }
 
 // Telegram bot
 const bot = new Telegraf(process.env.TELEGRAM_BOT_TOKEN)
 bot.start((ctx) => ctx.reply('Welcome'))
-bot.help((ctx) => ctx.reply('type /unfollowers'))
+bot.help((ctx) => {
+    ctx.reply('/unfollowers');
+    ctx.reply('/monitor hours');
+    ctx.reply('/stop_monitor');
+    ctx.reply('/next_check');
+})
 bot.hears('hi', (ctx) => ctx.reply('Hey there'))
 
 // Custom commands
 bot.command('unfollowers', (ctx) => {
-    checkUnfollowers(ctx, true);
+    checkUnfollowers(ctx);
 })
 
 let monitoringFollowers;
+let startTime = 0;
+let delay = 0;
 bot.command('monitor', (ctx) => {
     const text = ctx.update.message.text;
-    const refreshRateInSeconds = Number(text.split(' ')[1]);
-    console.log(refreshRateInSeconds);
-    monitoringFollowers = startTrackingUnfollowers(refreshRateInSeconds, ctx);
+    const refreshRateInHours = Number(text.split(' ')[1]) || 12;
+    startTime = Date.now();
+    monitoringFollowers = startTrackingUnfollowers(refreshRateInHours, ctx);
+    delay = monitoringFollowers._idleTimeout;
 })
 
-bot.command('/stop_monitoring', (ctx) => {
-    ctx.reply('Monitoring followers stopped')
+bot.command('/stop_monitor', (ctx) => {
+    console.log('Monitoring followers stopped');
+    ctx.reply('Monitoring followers stopped');
     clearInterval(monitoringFollowers);
+    monitoringFollowers = undefined;
+    startTime = 0;
+    delay = 0;
+})
+
+bot.command('/next_check', (ctx) => {
+    if (delay !== 0 && startTime !== 0) {
+        const interval = (delay - (Date.now() - startTime));
+        const timeLeft = Math.floor(interval / (1000 * 60 * 60)) + ":" + Math.floor(interval / (1000 * 60)) % 60 + ":" + Math.floor(interval / 1000) % 60;
+        console.log(`Next unfollowers check is after ${timeLeft} hours`)
+        ctx.reply(`Next unfollowers check is after ${timeLeft} hours`)
+    } else {
+        console.log(`No monitoring followers, type /monitor to start`);
+        ctx.reply(`No monitoring followers, type /monitor to start`);
+    }
 })
 
 // Enable graceful stop
