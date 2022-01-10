@@ -72,18 +72,25 @@ async function checkUnfollowers(ctx, verbose = false) {
     let url = `https://i.instagram.com/api/v1/friendships/${ds_user_id}/followers/?max_id=${max_id}&search_surface=follow_list_page`;
 
     let followersFull = [];
+    let requestsCount = 0;
     do {
         try {
             const response = await fetch(url, options);
             const data = await response.json();
-            console.log(data);
+            // console.log(data);
             const { users, next_max_id } = data;
             max_id = next_max_id;
             url = `https://i.instagram.com/api/v1/friendships/${ds_user_id}/followers/?max_id=${max_id}&search_surface=follow_list_page`;
             followersFull.push(...users);
-            console.log("Requesting:", url);
-
+            requestsCount++;
+            console.log(`${requestsCount} Requesting: ${url}`);
             await sleep(getRandomInt(2000, 5000));
+
+            // Chill from 10-20 seconds every 4th iteration to prevent detection
+            if (requestsCount > 0 && requestsCount % 4 == 0) {
+                await sleep(getRandomInt(10000, 20000));
+            }
+            
         } catch (error) {
             console.log(error);
         }
@@ -108,7 +115,10 @@ async function checkUnfollowers(ctx, verbose = false) {
 
             if (unfollowers.length > 0) {
                 console.log("New unfollowers:", unfollowers);
-                ctx.reply(`New unfollowers: ${unfollowers}`);
+                ctx.reply(`New unfollowers: `);
+                unfollowers.forEach(unfollower => {
+                    ctx.replyWithHTML(`<a href="https://www.instagram.com/${unfollower}/">${unfollower}</a>`);
+                });
             } else {
                 if (verbose) {
                     ctx.reply(`No new unfollowers`);
@@ -133,7 +143,7 @@ function startTrackingUnfollowers(periodInSeconds, ctx) {
 // Telegram bot
 const bot = new Telegraf(process.env.TELEGRAM_BOT_TOKEN)
 bot.start((ctx) => ctx.reply('Welcome'))
-bot.help((ctx) => ctx.reply('Send me a sticker'))
+bot.help((ctx) => ctx.reply('type /unfollowers'))
 bot.hears('hi', (ctx) => ctx.reply('Hey there'))
 
 // Custom commands
