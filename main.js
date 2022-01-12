@@ -104,8 +104,8 @@ async function checkUnfollowers(ctx) {
     }
 
     try {
-        if (fs.existsSync('followers.json')) {
-            let oldFollowers = await readFile('./followers.json');
+        if (fs.existsSync('data/followers.json')) {
+            let oldFollowers = await readFile('data/followers.json');
             oldFollowers = JSON.parse(oldFollowers);
             const unfollowers = oldFollowers.filter(x => !followers.includes(x));
 
@@ -124,7 +124,7 @@ async function checkUnfollowers(ctx) {
         console.error(err)
     }
 
-    await writeFile('followers.json', JSON.stringify(followers, null, 1));
+    await writeFile('data/followers.json', JSON.stringify(followers, null, 1));
 }
 
 function startTrackingUnfollowers(periodInHours, ctx) {
@@ -183,8 +183,8 @@ bot.command('/next_check', (ctx) => {
         console.log(`Next unfollowers check is after ${timeLeft} hours`)
         ctx.reply(`Next unfollowers check is after ${timeLeft} hours`)
     } else {
-        console.log(`No monitoring followers, type /monitor to start`);
-        ctx.reply(`No monitoring followers, type /monitor to start`);
+        console.log(`No monitoring followers, type "/monitor <hours>" to start`);
+        ctx.reply(`No monitoring followers, type "/monitor <hours>" to start`);
     }
 })
 
