@@ -130,6 +130,7 @@ async function checkUnfollowers(ctx) {
 function startTrackingUnfollowers(periodInHours, ctx) {
     ctx.reply('Monitoring followers started');
     console.log('Monitoring followers started');
+    startTime = Date.now();
 
     // Set interval in milliseconds + some random delay
     const interval = (periodInHours * 1000 * 60 * 60) + getRandomInt(20 * 1000, 60 * 1000);
@@ -162,7 +163,6 @@ let delay = 0;
 bot.command('monitor', (ctx) => {
     const text = ctx.update.message.text;
     const refreshRateInHours = Number(text.split(' ')[1]) || 12;
-    startTime = Date.now();
     monitoringFollowers = startTrackingUnfollowers(refreshRateInHours, ctx);
     delay = monitoringFollowers._idleTimeout;
 })
