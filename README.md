@@ -1,6 +1,5 @@
 # instagram-unfollowers-tracker
-
-Node.js telegram bor for tracking instagram unfollowers
+Node.js telegram bot for tracking instagram unfollowers
 
 ## .env
 ```
