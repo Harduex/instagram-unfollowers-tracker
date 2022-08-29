@@ -48,8 +48,8 @@ async function checkUnfollowers(ctx) {
     console.log('Checking for unfollowers');
     ctx.reply('Checking for unfollowers')
 
-    const ds_user_id = process.env.DS_USER_ID;
     const cookie = process.env.COOKIE;
+    const ds_user_id = cookie.split('ds_user_id=').pop().split(';')[0];
 
     const options = {
         "headers": {
