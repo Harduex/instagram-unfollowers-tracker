@@ -2,9 +2,16 @@
   "name": "instagram-unfollowers-tracker",
   "version": "1.0.0",
   "description": "Node.js telegram bor for tracking instagram unfollowers",
-  "main": "main.js",
+  "main": "./dist/trackUnfollowers.js",
+  "type": "module",
+  "engines": {
+    "npm": ">=8.0.0",
+    "node": ">=16.0.0"
+  },
   "scripts": {
-    "start": "node main.js"
+    "start": "npm run build && npm run start-tracking-unfollowers",
+    "start-tracking-unfollowers": "node ./dist/trackUnfollowers.js",
+    "build": "tsc"
   },
   "repository": {
     "type": "git",
@@ -27,8 +34,13 @@
   "homepage": "https://github.com/Harduex/instagram-unfollowers-tracker#readme",
   "dependencies": {
     "dotenv": "^10.0.0",
-    "node-fetch": "^3.1.0",
+    "node-fetch": "^3.2.10",
     "telegraf": "^4.5.2",
     "telegraf-command-parts": "^1.0.3"
+  },
+  "devDependencies": {
+    "@types/node": "^18.7.13",
+    "ts-node": "^10.9.1",
+    "typescript": "^4.8.2"
   }
 }
