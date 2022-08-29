@@ -53,7 +53,7 @@ bot.command("/next_check", (ctx) => {
   if (monitoringHour !== null) {
     logger(`Next unfollowers check is at: ${monitoringHour}:00`, ctx);
   } else {
-    logger(`There is no scheduled unollowers check`, ctx);
+    logger(`There is no scheduled unfollowers check`, ctx);
   }
 });
 
