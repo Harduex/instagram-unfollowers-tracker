@@ -42,6 +42,7 @@ bot.command("/stop_monitoring", (ctx) => {
     console.log("Monitoring followers stopped");
     ctx.reply("Monitoring followers stopped");
     monitoringUnfollowersTask.stop();
+    monitoringHour = null;
   } else {
     console.log("Monitoring task not found");
     ctx.reply("Monitoring task not found");
