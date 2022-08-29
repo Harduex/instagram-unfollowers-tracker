@@ -2,9 +2,10 @@
     "compilerOptions": {
         "moduleResolution": "node",
         "resolveJsonModule": true,
-        "target": "es6",
+        "target": "es5",
         "lib": [
-            "esnext"
+            "esnext",
+            "dom"
         ],
         "strict": false,
         "sourceMap": false,

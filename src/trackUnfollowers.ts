@@ -1,9 +1,9 @@
-import fetch from "node-fetch";
+// import fetch from "node-fetch";
 import "dotenv/config";
 import * as fs from "fs";
 import { Context, Telegraf } from "telegraf";
 import { InstagramApiResponse } from "./Interfaces";
-import { getRandomInt, readFile, sleep, writeFile } from "./helpers/general";
+import { readFile, writeFile, sleep, getRandomInt } from "./helpers/general";
 
 const checkUnfollowers = async (ctx: Context) => {
   console.log("Checking for unfollowers");
