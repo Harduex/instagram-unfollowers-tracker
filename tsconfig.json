@@ -4,7 +4,7 @@
         "resolveJsonModule": true,
         "target": "es5",
         "lib": [
-            "esnext",
+            "es2022",
             "dom"
         ],
         "strict": false,

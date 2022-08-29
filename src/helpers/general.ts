@@ -36,3 +36,13 @@ export const writeFile = (savePath: fs.PathOrFileDescriptor, data: string) => {
     });
   });
 };
+
+export const fileExists = (srcPath: fs.PathLike): boolean => {
+  return fs.existsSync(srcPath);
+};
+
+export const logger = (text, ctx): void => {
+    console.log(text);
+    ctx.reply(text);
+};
+  
