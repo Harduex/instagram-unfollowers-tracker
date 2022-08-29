@@ -107,5 +107,5 @@ dist
 .env
 .env.*
 
-# # data
-# data/
+# data
+data/
