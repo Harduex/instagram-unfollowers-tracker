@@ -26,6 +26,7 @@ COOKIE=
 - right click it and "copy value"
 
 TELEGRAM_BOT_TOKEN=your_telegram_bot_token
+INSTAGRAM_USERNAME=your_instagram_username
 
 ## Usage
 

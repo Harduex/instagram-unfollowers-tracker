@@ -108,4 +108,4 @@ dist
 .env.*
 
 # data
-data/
+data/*
