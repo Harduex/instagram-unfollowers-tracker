@@ -109,3 +109,5 @@ dist
 
 # data
 data/*
+
+.vscode
