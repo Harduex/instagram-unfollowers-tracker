@@ -77,13 +77,14 @@ export const checkUnfollowers = async (ctx: Context) => {
       const unfollowers = oldFollowers.filter((x) => !followers.includes(x));
 
       if (unfollowers.length > 0) {
-        logger(`New unfollowers: ${unfollowers}`, ctx);
+        logger(`New unfollowers:`, ctx);
 
-        unfollowers.forEach((unfollower) => {
-          ctx.replyWithHTML(
-            `<a href="https://www.instagram.com/${unfollower}/">${unfollower}</a>`
+        for (const key in unfollowers) {
+          await ctx.replyWithHTML(
+            `<a href="https://www.instagram.com/${unfollowers[key]}/">${unfollowers[key]}</a>`
           );
-        });
+        }
+        
       } else {
         logger(`No new unfollowers`, ctx);
       }

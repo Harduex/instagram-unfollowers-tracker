@@ -8,7 +8,7 @@
     "node": ">=18.0.0"
   },
   "scripts": {
-    "start": "npm run build && npm run start-tracking-unfollowers",
+    "start": "npm run start-tracking-unfollowers",
     "start-dev": "npm run build && npm run start-tracking-unfollowers",
     "start-tracking-unfollowers": "node ./dist/index.js",
     "build": "tsc"
