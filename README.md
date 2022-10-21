@@ -25,8 +25,10 @@ COOKIE=
 - scroll to find header named "cookie"
 - right click it and "copy value"
 
+```
 TELEGRAM_BOT_TOKEN=your_telegram_bot_token
 INSTAGRAM_USERNAME=your_instagram_username
+```
 
 ## Usage
 
@@ -38,13 +40,18 @@ $ npm start
 ## Build docker image (optional)
 
 ```
-docker build . -t harduex/instagram-unfollowers-telegram-bot
+docker build . -t harduex/instagram-unfollowers-bot
+```
+
+## Or pull the image from docker hub
+```
+docker pull harduex/instagram-unfollowers-bot
 ```
 
 ### then docker run
 
 ```
-docker run -it -d -v instagram-unfollowers-volume:/app/data --env-file .env harduex/instagram-unfollowers-telegram-bot
+docker run -it -d -v instagram-unfollowers-volume:/app/data --env-file .env harduex/instagram-unfollowers-bot
 ```
 
 ## or docker-compose

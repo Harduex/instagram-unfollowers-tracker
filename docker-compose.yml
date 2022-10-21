@@ -1,7 +1,7 @@
 version: "3.9"
 services:
   unfollowers-bot:
-    image: "harduex/instagram-unfollowers-telegram-bot"
+    image: "harduex/instagram-unfollowers-bot"
     volumes:
       - instagram-unfollowers-volume:/app/data
     env_file:
