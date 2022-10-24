@@ -6,6 +6,7 @@ services:
       - instagram-unfollowers-volume:/app/data
     env_file:
       - .env
+    restart: on-failure
 
 volumes:
   instagram-unfollowers-volume: 

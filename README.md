@@ -52,6 +52,9 @@ docker pull harduex/instagram-unfollowers-bot
 
 ```
 docker run -it -d -v instagram-unfollowers-volume:/app/data --env-file .env harduex/instagram-unfollowers-bot
+
+# run multiple instances by replacing username with every user you run
+docker-compose -p username up -d
 ```
 
 ## or docker-compose
