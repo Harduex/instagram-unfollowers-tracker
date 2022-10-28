@@ -42,7 +42,10 @@ export const fileExists = (srcPath: fs.PathLike): boolean => {
 };
 
 export const logger = (text, ctx): void => {
-    console.log(text);
-    ctx.reply(text);
+  console.log(text);
+  ctx.reply(text);
 };
-  
+
+export const padNumber = (n: number): string => {
+  return String(n).padStart(2, "0");
+};

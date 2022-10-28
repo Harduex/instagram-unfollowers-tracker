@@ -6,8 +6,8 @@ export const scheduleMonitoringUnfollowers = (
   cronPeriod: string,
   ctx: Context
 ) => {
-  return cron.schedule(cronPeriod, () => {
+  return cron.schedule(cronPeriod, async () => {
     console.log("Cron service is running.");
-    checkUnfollowers(ctx);
+    await checkUnfollowers(ctx);
   });
 };

@@ -1,18 +1,18 @@
 import "dotenv/config";
 import { ScheduledTask } from "node-cron";
 import { Telegraf } from "telegraf";
-import { logger } from "./helpers/general";
+import { logger, padNumber } from "./helpers/general";
 import { scheduleMonitoringUnfollowers } from "./services/cronService";
 import { checkUnfollowers } from "./services/unfollowersTrackerService";
 
 // Telegram bot
 const bot = new Telegraf(process.env.TELEGRAM_BOT_TOKEN);
 bot.start((ctx) => ctx.reply("Welcome"));
-bot.help((ctx) => {
-  ctx.reply("/unfollowers");
-  ctx.reply("/start_monitoring hour_of_the_day");
-  ctx.reply("/stop_monitoring");
-  ctx.reply("/next_check");
+bot.help(async (ctx) => {
+  await ctx.reply("/unfollowers");
+  await ctx.reply("/start_monitoring hour minute");
+  await ctx.reply("/stop_monitoring");
+  await ctx.reply("/next_check");
 });
 
 bot.hears("hi", (ctx) => ctx.reply("Hey there"));
@@ -24,15 +24,17 @@ bot.command("unfollowers", (ctx) => {
 
 let monitoringUnfollowersTask: ScheduledTask | null = null;
 let monitoringHour: number | null = null;
+let monitoringMinute: number | null = 0;
 
 bot.command("start_monitoring", (ctx) => {
   const text = ctx.update.message.text;
   monitoringHour = Number(text.split(" ")[1]) || 12;
-  // run cron every day at the hour that user entered
-  const cronPeriod = `0 ${monitoringHour} * * *`;
+  monitoringMinute = Number(text.split(" ")[2]) || 0;
+  // run cron every day at the hour and minute that user entered
+  const cronPeriod = `${monitoringMinute || 0} ${monitoringHour || 12} * * *`;
   monitoringUnfollowersTask = scheduleMonitoringUnfollowers(cronPeriod, ctx);
   logger(
-    `Monitoring followers started, every day at ${monitoringHour}:00`,
+    `Monitoring followers started, every day at ${monitoringHour}:${padNumber(monitoringMinute)}`,
     ctx
   );
 });
