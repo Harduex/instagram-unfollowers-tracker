@@ -1,5 +1,17 @@
 FROM node:18-alpine
 
+# update
+RUN apk update
+RUN apk upgrade
+RUN apk add ca-certificates && update-ca-certificates
+
+# Change TimeZone
+RUN apk add --update tzdata
+ENV TZ=Europe/Sofia
+
+# Clean APK cache
+RUN rm -rf /var/cache/apk/*
+
 # Create app directory
 WORKDIR /app
 
